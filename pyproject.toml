@@ -1,0 +1,36 @@
+[project]
+name = "qda360"
+version = "1.0.0"
+description = "AI-assisted qualitative analysis with dual-coder LLM verification"
+authors = [
+    {name = "QDA360 Contributors"}
+]
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "streamlit>=1.32.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "python-docx>=1.1.0",
+    "spacy>=3.7.0",
+    "xlsxwriter>=3.1.0",
+    "python-dotenv>=1.0.0",
+    "litellm>=1.35.0",
+    "openai>=1.12.0",
+    "aiohttp>=3.9.0",
+]
+
+[tool.poetry]
+packages = [
+    { include = "qda360", from = "src" }
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0,<9.0.0",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

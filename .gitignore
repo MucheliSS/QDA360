@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+.pytest_cache/
+.env
+.venv/
+poetry.lock
+examples/data/*_exported.xlsx
+.vscode/
+dist/
+
+# Qux360 cache directories
+.qux360_cache/
