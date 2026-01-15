@@ -44,23 +44,55 @@ def parse_docx(path: str | Path) -> pd.DataFrame:
         )
 
         # 2. Key fallback: "Speaker: Text" pattern (common in cleaned transcripts)
-        # Matches "Speaker Name: The text..."
-        # We'll use 00:00 as dummy timestamp if none found
         if not match:
              match_colon = re.match(r'^([A-Za-z0-9\s\-_]+):\s+(.+)', line)
              if match_colon:
-                 # Check if speaker name looks reasonable (not too long, e.g. < 50 chars)
                  potential_speaker = match_colon.group(1).strip()
                  if len(potential_speaker) < 50 and len(potential_speaker) > 1:
-                     # Treat as new turn
                      if current_speaker and current_statement:
                         cleaned_statement = " ".join(current_statement).replace("\n", " ")
                         segments.append([current_timestamp, None, current_speaker, cleaned_statement, [], []])
                      
                      current_speaker = potential_speaker
-                     current_timestamp = "00:00" # Dummy timestamp
+                     current_timestamp = "00:00"
                      current_statement = [match_colon.group(2).strip()]
                      return
+
+        # 3. Implicit Speaker Fallback: Short line that looks like a name (no colon/timestamp)
+        # Only strict if we are NOT currently in the middle of a statement? 
+        # Actually, often speaker names are just short lines.
+        # Heuristic: < 50 chars, no sentence punctuation, distinct from previous text
+        if not match and not match_colon:
+            is_potential_name = (
+                len(line) < 50 
+                and not line.endswith(('.', '?', '!', ',', ';'))
+                and re.match(r'^[A-Za-z0-9\s\-_]+$', line)
+            )
+            
+            if is_potential_name:
+                 # It's likely a speaker name
+                 if current_speaker and current_statement:
+                    cleaned_statement = " ".join(current_statement).replace("\n", " ")
+                    segments.append([current_timestamp, None, current_speaker, cleaned_statement, [], []])
+                 
+                 current_speaker = line.strip()
+                 current_timestamp = "00:00"
+                 current_statement = []
+                 return
+
+        if match:
+            # Save previous segment
+            if current_speaker and current_statement:
+                cleaned_statement = " ".join(current_statement).replace("\n", " ")
+                segments.append([current_timestamp, None, current_speaker, cleaned_statement, [], []])
+
+            # Extract new speaker + timestamp
+            current_speaker = match.group(1).strip()
+            current_timestamp = match.group(2)
+            current_statement = [line.split(current_timestamp, 1)[1].strip()]
+        else:
+            if current_statement is not None:
+                current_statement.append(line)
 
         if match:
             # Save previous segment
