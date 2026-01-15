@@ -1,4 +1,2 @@
-# packages.txt - System dependencies for Streamlit Cloud
-
-# Required for spaCy
 libgomp1
+
