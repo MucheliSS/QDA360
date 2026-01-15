@@ -275,7 +275,7 @@ def render_home():
     
     if st.session_state.api_key_valid:
         if st.button("🚀 Start New Analysis", type="primary", use_container_width=True):
-            st.switch_page("pages/1_📁_Upload.py")
+            st.switch_page("pages/1_Upload.py")
     else:
         st.info("👈 Enter your OpenRouter API key in the sidebar to begin")
 
