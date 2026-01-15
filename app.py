@@ -37,13 +37,23 @@ st.markdown("""
         opacity: 0.9;
     }
     
-    /* Card styling */
+    /* Card styling - dark mode compatible */
     .info-card {
-        background: #F9FAFB;
-        border: 1px solid #E5E7EB;
+        background: #1E293B;
+        border: 1px solid #334155;
         border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
+        color: #F1F5F9;
+    }
+    
+    .info-card h4 {
+        color: #E2E8F0;
+        margin-top: 0;
+    }
+    
+    .info-card p, .info-card li {
+        color: #CBD5E1;
     }
     
     /* Status indicators */
