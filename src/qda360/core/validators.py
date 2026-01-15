@@ -7,7 +7,7 @@ validation check and returns a QIndex result.
 
 Example
 -------
->>> from qux360.core.validators import HeuristicAgreementValidator
+>>> from qda360.core.validators import HeuristicAgreementValidator
 >>> validator = HeuristicAgreementValidator(ok_threshold=0.60)
 >>> validation = validator.validate("Speaker1", transcript)
 >>> print(validation.status)  # "ok", "check", or "iffy"
